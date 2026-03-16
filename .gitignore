@@ -59,8 +59,12 @@ Thumbs.db
 .idea/
 .cursor/
 .specstory/
+.cursorindexingignore
 *.swp
 *.swo
 
 # Logs
 *.log
+
+# Project Documentation
+instrucciones.txt
