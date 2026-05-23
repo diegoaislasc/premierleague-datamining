@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIA: Reporte de Inteligencia de Negocios - EPL Shots 24/25</title>
+    
+    <!-- Google Fonts: Inter para tipografía geométrica -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DISEÑO DEL SISTEMA DE COLORES Y TIPOGRAFÍA --- */
+        :root {
+            /* Modo Oscuro (Dark Theme) */
+            --dark-bg: #090D1A;
+            --dark-card: #121829;
+            --dark-text-primary: #FFFFFF;
+            --dark-text-secondary: #94A3B8;
+            --dark-hairline: rgba(255, 255, 255, 0.08);
+
+            /* Modo Claro (Light Theme) */
+            --light-bg: #F8FAFC;
+            --light-card: #FFFFFF;
+            --light-card-border: #E2E8F0;
+            --light-text-primary: #0F172A;
+            --light-text-secondary: #475569;
+            --light-hairline: rgba(15, 23, 42, 0.08);
+            
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: #05070F;
+            color: #FFFFFF;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        /* Contenedor del Slide Deck (Aspect Ratio Estándar de Diapositivas 16:9) */
+        .deck-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 1920px;
+            max-height: 1080px;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: #000;
+        }
+
+        /* --- DIAPOSITIVA (SLIDE BASE) --- */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 5.5% 6% 4.5% 6%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.98);
+            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+                        transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+                        visibility 0.5s;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        /* --- INTERCALADO DE MODO DUAL --- */
+        .theme-dark {
+            background-color: var(--dark-bg);
+            color: var(--dark-text-primary);
+        }
+
+        .theme-dark .text-secondary {
+            color: var(--dark-text-secondary);
+        }
+
+        .theme-dark .card {
+            background-color: var(--dark-card);
+            border: 1px solid var(--dark-hairline);
+        }
+
+        .theme-dark .hairline {
+            border-bottom: 1px solid var(--dark-hairline);
+        }
+
+        .theme-light {
+            background-color: var(--light-bg);
+            color: var(--light-text-primary);
+        }
+
+        .theme-light .text-secondary {
+            color: var(--light-text-secondary);
+        }
+
+        .theme-light .card {
+            background-color: var(--light-card);
+            border: 1px solid var(--light-card-border);
+        }
+
+        .theme-light .hairline {
+            border-bottom: 1px solid var(--light-hairline);
+        }
+
+        /* --- ENCABEZADO DE SECCIÓN (TOP BAR) --- */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 2%;
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        .pagination {
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            font-weight: 500;
+            opacity: 0.6;
+        }
+
+        /* --- TÍTULOS Y CABECERAS DE SLIDE --- */
+        .slide-header {
+            margin-bottom: 2.5%;
+        }
+
+        .slide-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-subtitle {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.6;
+            max-width: 800px;
+        }
+
+        /* --- CONTENIDO PRINCIPAL (LAYOUTS REUSABLES) --- */
+        .slide-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Grid de 3 Columnas */
+        .grid-3-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.75rem;
+            width: 100%;
+        }
+
+        /* Grid de 4 Columnas / Timeline */
+        .grid-4-cols {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        /* Deep Dive: Lado a Lado (50/50, 40/60 o 45/55) */
+        .deep-dive-40-60 {
+            display: grid;
+            grid-template-columns: 4fr 6fr;
+            gap: 2rem;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .deep-dive-50-50 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        /* --- SISTEMA DE CARDS --- */
+        .card {
+            border-radius: 12px;
+            padding: 2.25rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            position: relative;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-number {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 500;
+            opacity: 0.25;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.7;
+        }
+
+        /* Viñetas técnicas */
+        .bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 1.25rem;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            opacity: 0.8;
+        }
+
+        .bullet-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.55rem;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: currentColor;
+            opacity: 0.5;
+        }
+
+        .tag-monospace {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 1rem;
+            align-self: flex-start;
+            background-color: rgba(128, 128, 128, 0.1);
+            opacity: 0.8;
+        }
+
+        /* --- ARQUETIPO PORTADA (HERO LAYOUT) --- */
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+            height: 100%;
+        }
+
+        .hero-title-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-desc {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            opacity: 0.6;
+            max-width: 600px;
+        }
+
+        /* Objeto Geométrico 3D / Glassmorphism en CSS */
+        .hero-graphic-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 350px;
+        }
+
+        .radial-gradient-back {
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+        }
+
+        .glass-sphere {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3),
+                        inset 0 10px 30px rgba(255, 255, 255, 0.15);
+            z-index: 2;
+            position: relative;
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        .glass-sphere::after {
+            content: "";
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(4px);
+        }
+
+        .glass-orbit {
+            position: absolute;
+            width: 280px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transform: rotate(-15deg);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* --- FOOTERS --- */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 2%;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.4;
+        }
+
+        /* --- CONTROLES DE NAVEGACIÓN Y PROGRESO --- */
+        .controls-overlay {
+            position: absolute;
+            bottom: 4%;
+            right: 6%;
+            display: flex;
+            gap: 0.75rem;
+            z-index: 99;
+        }
+
+        .nav-btn {
+            background-color: rgba(128, 128, 128, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: currentColor;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .theme-light .nav-btn {
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(128, 128, 128, 0.15);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: rgba(128, 128, 128, 0.1);
+            z-index: 99;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: currentColor;
+            opacity: 0.6;
+            transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* --- ESTILOS DE ELEMENTOS ESPECIALES DE DATOS --- */
+        .stat-metric {
+            font-family: var(--font-mono);
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.04em;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hairline-separator {
+            width: 100%;
+            height: 1px;
+            margin: 1.25rem 0;
+        }
+
+        .highlight-accent {
+            font-weight: 700;
+            opacity: 1;
+        }
+
+        /* Leyendas y tablas de datos */
+        .table-data {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .table-data th {
+            text-align: left;
+            padding: 0.5rem;
+            font-weight: 600;
+            opacity: 0.5;
+            border-bottom: 1px solid currentColor;
+        }
+
+        .table-data td {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.05);
+        }
+
+        .table-data tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="deck-container">
+        
+        <!-- ==================== SLIDE 1 (PORTADA / HERO) ==================== -->
+        <section class="slide active theme-dark" id="slide-1" data-section="INTRODUCCIÓN" data-index="01">
+            <div class="top-bar">
+                <span class="section-tag">I N T R O D U C C I Ó N</span>
+                <span class="pagination">01 / 08</span>
+            </div>
+            
+            <div class="slide-content">
+                <div class="hero-layout">
+                    <div class="hero-title-group">
+                        <h1 class="hero-title">EPL Shots<br>Intelligence</h1>
+                        <p class="hero-desc">Reporte de Inteligencia de Negocios y Minería de Datos sobre los disparos de la English Premier League (Temporada 2024-2025).</p>
+                        <span class="tag-monospace">DATAMINE PROJ: PIA_REPORT_F10</span>
+                    </div>
+                    <div class="hero-graphic-container">
+                        <div class="radial-gradient-back"></div>
+                        <div class="glass-orbit"></div>
+                        <div class="glass-sphere"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <span>DIEGO ANDRE ISLAS CADILLO</span>
+                <span>GITHUB/DIEGOAISLASC/PREMIERLEAGUE-DATAMINING</span>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 2 (DATA SUMMARY / GRID 3 COL) ==================== -->
+        <section class="slide theme-light" id="slide-2" data-section="DATOS" data-index="02">
+            <div class="top-bar">
+                <span class="section-tag">C A L I D A D   D E   D A T O S</span>
+                <span class="pagination">02 / 08</span>
+            </div>
+            
+            <div class="slide-header">
+                <h2 class="slide-title">Estructura del Dataset y Calidad</h2>
+                <p class="slide-subtitle text-secondary">El preprocesamiento robusto (Prácticas 1-3) transformó la información cruda de eventos en un dataset limpio apto para modelos predictivos.</p>
+            </div>
+
+            <div class="slide-content">
+                <div class="grid-3-cols">
+                    <!-- Tarjeta 1 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">01</div>
+                            <h3 class="card-title">Volumen y Calidad</h3>
+                            <p class="card-desc text-secondary">Procesamiento de datos semiestructurados extraídos de BigQuery. Limpieza de duplicados y estructuración de JSON.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <div class="stat-metric">7,987</div>
+                            <div class="stat-label">Disparos Registrados</div>
+                        </div>
+                    </div>
+                    <!-- Tarjeta 2 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">02</div>
+                            <h3 class="card-title">Efectividad General</h3>
+                            <p class="card-desc text-secondary">Conversión base real observada en toda la liga. Representa el estándar de éxito general sobre cualquier tiro en juego.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <div class="stat-metric">11.07%</div>
+                            <div class="stat-label">Tasa de Conversión (Goles)</div>
+                        </div>
+                    </div>
+                    <!-- Tarjeta 3 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">03</div>
+                            <h3 class="card-title">Preprocesamiento</h3>
+                            <p class="card-desc text-secondary">Desglose de coordenadas relativas de tiro, extracción de variables de jugador, parseo de fechas y normalización espacial.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <span class="tag-monospace">cleaned_epl_shots.csv</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer text-secondary">
+                <span>EPL SHOTS 24/25</span>
+                <span>PRACTICA 1 - 3: DATA PREPARATION</span>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 3 (STATS / DEEP DIVE 40-60) ==================== -->
+        <section class="slide theme-dark" id="slide-3" data-section="ESTADÍSTICA" data-index="03">
+            <div class="top-bar">
+                <span class="section-tag">P R U E B A S   E S T A D Í S T I C A S</span>
+                <span class="pagination">03 / 08</span>
+            </div>
+            
+            <div class="slide-header">
+                <h2 class="slide-title">Validación de Hipótesis y Comportamientos</h2>
+                <p class="slide-subtitle text-secondary">Las pruebas no paramétricas confirman qué factores determinan el éxito de las oportunidades, descartando efectos del azar (Práctica 4).</p>
+            </div>
+
+            <div class="slide-content">
+                <div class="deep-dive-40-60">
+                    <!-- Tarjeta Izquierda (Alcance) -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">01</div>
+                            <h3 class="card-title">Normalidad del xG</h3>
+                            <p class="card-desc text-secondary">El análisis previo de la distribución de Expected Goals (xG) determinó la no normalidad de los datos, requiriendo pruebas estadísticas de rango.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <ul class="bullet-list">
+                                <li>Prueba Shapiro-Wilk (n=5000)</li>
+                                <li>P-value: <span class="highlight-accent">9.49e-74</span></li>
+                                <li>Distribución altamente sesgada</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Tarjeta Derecha (Deep Dive Técnico) -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">02</div>
+                            <h3 class="card-title">Pruebas de Influencia</h3>
+                            <p class="card-desc text-secondary" style="margin-bottom: 1.5rem;">Pruebas de Kruskal-Wallis (comparación entre posiciones de jugadores) y Mann-Whitney U (comparación de localía).</p>
+                            
+                            <table class="table-data text-secondary">
+                                <thead>
+                                    <tr>
+                                        <th>Hipótesis Evaluada</th>
+                                        <th>Prueba Ejecutada</th>
+                                        <th>P-Value</th>
+                                        <th>Resultado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>La posición influye en el xG del tiro</td>
+                                        <td>Kruskal-Wallis</td>
+                                        <td class="highlight-accent">9.08e-57</td>
+                                        <td>Altamente Significativo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>El equipo local tiene tiros de mayor calidad</td>
+                                        <td>Mann-Whitney U</td>
+                                        <td class="highlight-accent">0.1420</td>
+                                        <td>No Significativo</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <p class="card-desc text-secondary" style="font-size: 0.85rem;"><strong>Hallazgo:</strong> La posición del jugador en el campo define la peligrosidad de sus tiros. Sorprendentemente, ser local no influye en la calidad individual del tiro (Mediana xG Local: 0.0559 vs Visitante: 0.0584).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer text-secondary">
+                <span>EPL SHOTS 24/25</span>
+                <span>PRACTICA 4: HYPOTHESIS TESTING</span>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 4 (LINEAR MODELS / DEEP DIVE 50-50) ==================== -->
+        <section class="slide theme-light" id="slide-4" data-section="MODELOS" data-index="04">
+            <div class="top-bar">
+                <span class="section-tag">R E G R E S I Ó N   Y   P R O N Ó S T I C O</span>
+                <span class="pagination">04 / 08</span>
+            </div>
+            
+            <div class="slide-header">
+                <h2 class="slide-title">Modelado Lineal y Series de Tiempo</h2>
+                <p class="slide-subtitle text-secondary">Evaluamos la relación entre la oportunidad creada (xG) y la calidad del remate (xG a Puerta), además de su comportamiento temporal (Prácticas 5 y 8).</p>
+            </div>
+
+            <div class="slide-content">
+                <div class="deep-dive-50-50">
+                    <!-- Tarjeta Izquierda -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">01</div>
+                            <h3 class="card-title">Regresión de Calidad (xG vs xGOT)</h3>
+                            <p class="card-desc text-secondary">Predicción de la calidad del remate a portería basándose en la oportunidad de gol inicial (excluyendo tiros errados xgot=0).</p>
+                            <div class="hairline hairline-separator"></div>
+                            <ul class="bullet-list">
+                                <li><strong>$R^2$ Score:</strong> <span class="highlight-accent">0.4533</span></li>
+                                <li><strong>Pendiente (Coeficiente):</strong> <span class="highlight-accent">0.9631</span></li>
+                                <li><strong>Intersección:</strong> 0.1624</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <span class="tag-monospace">Ecuación: y = 0.9631x + 0.1624</span>
+                        </div>
+                    </div>
+                    <!-- Tarjeta Derecha -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">02</div>
+                            <h3 class="card-title">Tendencia de Peligro (Time Series)</h3>
+                            <p class="card-desc text-secondary">Pronóstico de la suma diaria de xG generado en la liga para predecir si el juego se vuelve más o menos ofensivo con el tiempo.</p>
+                            <div class="hairline hairline-separator"></div>
+                            <ul class="bullet-list">
+                                <li><strong>Pendiente diaria:</strong> <span class="highlight-accent">-0.0100</span> xG/día</li>
+                                <li><strong>$R^2$ Score Temporal:</strong> <span class="highlight-accent">0.0162</span></li>
+                                <li><strong>Interpretación:</strong> Tendencia diaria sumamente estable con una leve tendencia a la baja en goles generados por día.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <span class="tag-monospace">Predicción: 30 Días de Estabilidad</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer text-secondary">
+                <span>EPL SHOTS 24/25</span>
+                <span>PRACTICA 5 & 8: LINEAR REGRESSION</span>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 5 (CLUSTERING / TIMELINE 4 COL) ==================== -->
+        <section class="slide theme-dark" id="slide-5" data-section="SEGMENTACIÓN" data-index="05">
+            <div class="top-bar">
+                <span class="section-tag">A G R U P A M I E N T O   K - M E A N S</span>
+                <span class="pagination">05 / 08</span>
+            </div>
+            
+            <div class="slide-header">
+                <h2 class="slide-title">Segmentación Espacial y Peligrosidad</h2>
+                <p class="slide-subtitle text-secondary">El algoritmo de K-Means (Práctica 7) agrupó los disparos en 4 clústeres basados en su ubicación espacial en coordenadas y la peligrosidad del tiro.</p>
+            </div>
+
+            <div class="slide-content">
+                <div class="grid-4-cols">
+                    <!-- Cluster 3 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number" style="opacity: 0.6; color: #6366F1;">C3</div>
+                            <h3 class="card-title">Peligro Extremo</h3>
+                            <p class="card-desc text-secondary" style="font-size: 0.85rem;">Tiros tomados dentro del área chica, sumamente centrados.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <div class="stat-metric" style="font-size: 1.8rem;">51.91%</div>
+                            <div class="stat-label" style="font-size: 0.7rem;">Tasa de Goles Real</div>
+                            <span class="tag-monospace" style="font-size: 0.65rem;">Dist: 7.5m | xG: 0.55</span>
+                        </div>
+                    </div>
+                    <!-- Cluster 2 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">C2</div>
+                            <h3 class="card-title">Local Estándar</h3>
+                            <p class="card-desc text-secondary" style="font-size: 0.85rem;">Tiros del equipo local alrededor del punto de penal.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <div class="stat-metric" style="font-size: 1.8rem;">8.85%</div>
+                            <div class="stat-label" style="font-size: 0.7rem;">Tasa de Goles Real</div>
+                            <span class="tag-monospace" style="font-size: 0.65rem;">Dist: 10.3m | xG: 0.09</span>
+                        </div>
+                    </div>
+                    <!-- Cluster 1 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">C1</div>
+                            <h3 class="card-title">Visitante Estándar</h3>
+                            <p class="card-desc text-secondary" style="font-size: 0.85rem;">Tiros del visitante alrededor del punto de penal.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <div class="stat-metric" style="font-size: 1.8rem;">9.07%</div>
+                            <div class="stat-label" style="font-size: 0.7rem;">Tasa de Goles Real</div>
+                            <span class="tag-monospace" style="font-size: 0.65rem;">Dist: 11.4m | xG: 0.09</span>
+                        </div>
+                    </div>
+                    <!-- Cluster 0 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">C0</div>
+                            <h3 class="card-title">Tiros Lejanos</h3>
+                            <p class="card-desc text-secondary" style="font-size: 0.85rem;">Tiros ejecutados fuera del área grande y bandas lejanas.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <div class="stat-metric" style="font-size: 1.8rem;">4.32%</div>
+                            <div class="stat-label" style="font-size: 0.7rem;">Tasa de Goles Real</div>
+                            <span class="tag-monospace" style="font-size: 0.65rem;">Dist: 23.5m | xG: 0.03</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer text-secondary">
+                <span>EPL SHOTS 24/25</span>
+                <span>PRACTICA 7: CLUSTERING (K-MEANS)</span>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 6 (CLASSIFICATION / DEEP DIVE 40-60) ==================== -->
+        <section class="slide theme-light" id="slide-6" data-section="CLASIFICACIÓN" data-index="06">
+            <div class="top-bar">
+                <span class="section-tag">C L A S I F I C A C I Ó N   K - N N</span>
+                <span class="pagination">06 / 08</span>
+            </div>
+            
+            <div class="slide-header">
+                <h2 class="slide-title">Predicción de Goles</h2>
+                <p class="slide-subtitle text-secondary">Entrenamiento de un clasificador K-Nearest Neighbors (Práctica 6) para pronosticar si un disparo terminará en Gol basándose en sus características iniciales.</p>
+            </div>
+
+            <div class="slide-content">
+                <div class="deep-dive-40-60">
+                    <!-- Tarjeta Izquierda -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">01</div>
+                            <h3 class="card-title">Configuración del K-NN</h3>
+                            <p class="card-desc text-secondary">Utilizamos un pipeline con estandarización de escala (StandardScaler) para corregir diferencias dimensionales en distancias euclidianas.</p>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <ul class="bullet-list">
+                                <li><strong>Variables:</strong> coords x/y, xG, bodyPart, situation, isHome.</li>
+                                <li><strong>Hiperparámetro K óptimo:</strong> K = 8</li>
+                                <li><strong>División de datos:</strong> 80% / 20%</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Tarjeta Derecha -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">02</div>
+                            <h3 class="card-title">Precisión del Modelo</h3>
+                            <p class="card-desc text-secondary" style="margin-bottom: 1.5rem;">El modelo clasificador muestra un alto grado de certeza para categorizar tiros, beneficiado por el volumen de tiros fallidos pero con retos en la clase minoritaria.</p>
+                            
+                            <div style="display: flex; gap: 3rem;">
+                                <div>
+                                    <div class="stat-metric">90.33%</div>
+                                    <div class="stat-label">Accuracy del Modelo (K=8)</div>
+                                </div>
+                                <div>
+                                    <div class="stat-metric">89.70%</div>
+                                    <div class="stat-label">Accuracy Base (K=5)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="hairline hairline-separator"></div>
+                            <p class="card-desc text-secondary" style="font-size: 0.85rem;"><strong>Nota Operativa:</strong> Debido al desbalance natural (11% de goles), el modelo es excelente identificando disparos fallidos. Para mejorar la detección de goles, se recomienda implementar técnicas de remuestreo (SMOTE).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer text-secondary">
+                <span>EPL SHOTS 24/25</span>
+                <span>PRACTICA 6: DATA CLASSIFICATION</span>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 7 (TEXT ANALYSIS / GRID 3 COL) ==================== -->
+        <section class="slide theme-dark" id="slide-7" data-section="TEXTO" data-index="07">
+            <div class="top-bar">
+                <span class="section-tag">A N Á L I S I S   D E   T E X T O</span>
+                <span class="pagination">07 / 08</span>
+            </div>
+            
+            <div class="slide-header">
+                <h2 class="slide-title">Análisis de Frecuencias y Contexto</h2>
+                <p class="slide-subtitle text-secondary">El análisis semántico y de texto (Práctica 9) revela a los principales generadores de tiros y las situaciones de juego más dominantes.</p>
+            </div>
+
+            <div class="slide-content">
+                <div class="grid-3-cols">
+                    <!-- Tarjeta 1 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">01</div>
+                            <h3 class="card-title">Top Jugadores</h3>
+                            <p class="card-desc text-secondary" style="margin-bottom: 1rem;">Distribución de los jugadores con mayor volumen de disparos de la temporada.</p>
+                            
+                            <table class="table-data text-secondary" style="font-size: 0.8rem;">
+                                <tbody>
+                                    <tr><td>1. Antoine Semenyo</td><td class="highlight-accent">106 tiros</td></tr>
+                                    <tr><td>2. Cole Palmer</td><td class="highlight-accent">99 tiros</td></tr>
+                                    <tr><td>3. Erling Haaland</td><td class="highlight-accent">92 tiros</td></tr>
+                                    <tr><td>4. Mohamed Salah</td><td class="highlight-accent">92 tiros</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Tarjeta 2 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">02</div>
+                            <h3 class="card-title">Situaciones de Juego</h3>
+                            <p class="card-desc text-secondary" style="margin-bottom: 1rem;">Contexto táctico en el cual se originan los tiros en la EPL.</p>
+                            
+                            <table class="table-data text-secondary" style="font-size: 0.8rem;">
+                                <tbody>
+                                    <tr><td>Asistidos</td><td class="highlight-accent">4,058</td></tr>
+                                    <tr><td>Tiro de esquina</td><td class="highlight-accent">1,313</td></tr>
+                                    <tr><td>Jugada regular</td><td class="highlight-accent">1,062</td></tr>
+                                    <tr><td>Contraataque</td><td class="highlight-accent">565</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Tarjeta 3 -->
+                    <div class="card">
+                        <div>
+                            <div class="card-number">03</div>
+                            <h3 class="card-title">Anatomía (Parte del Cuerpo)</h3>
+                            <p class="card-desc text-secondary" style="margin-bottom: 1rem;">Distribución de la superficie de contacto en la ejecución.</p>
+                            
+                            <table class="table-data text-secondary" style="font-size: 0.8rem;">
+                                <tbody>
+                                    <tr><td>Pie derecho</td><td class="highlight-accent">3,863</td></tr>
+                                    <tr><td>Pie izquierdo</td><td class="highlight-accent">2,676</td></tr>
+                                    <tr><td>Cabeza</td><td class="highlight-accent">1,394</td></tr>
+                                    <tr><td>Otros</td><td class="highlight-accent">27</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer text-secondary">
+                <span>EPL SHOTS 24/25</span>
+                <span>PRACTICA 9: TEXT ANALYSIS & WORDCLOUD</span>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 8 (CONCLUSIONES / HERO) ==================== -->
+        <section class="slide theme-dark" id="slide-8" data-section="CONCLUSIÓN" data-index="08">
+            <div class="top-bar">
+                <span class="section-tag">C O N C L U S I Ó N</span>
+                <span class="pagination">08 / 08</span>
+            </div>
+            
+            <div class="slide-content">
+                <div class="hero-layout">
+                    <div class="hero-title-group">
+                        <h1 class="hero-title" style="font-size: 3.5rem;">Estrategia<br>y Táctica</h1>
+                        <p class="hero-desc" style="margin-bottom: 1rem;"><strong>Conclusión Clave:</strong> Deben penalizarse los tiros lejanos (Cluster 0, tasa de gol de 4.32%) y maximizar las asistencias que coloquen al delantero en el área chica (Cluster 3, tasa de gol de 51.91%). El juego local vs visitante no altera la calidad del tiro individual, sino la frecuencia del mismo.</p>
+                        <span class="tag-monospace">FIN DEL REPORTE: MINERÍA DE DATOS 2026</span>
+                    </div>
+                    <div class="hero-graphic-container">
+                        <div class="radial-gradient-back" style="background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(0,0,0,0) 70%);"></div>
+                        <div class="glass-orbit" style="transform: rotate(20deg); width: 300px;"></div>
+                        <div class="glass-sphere" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <span>FACULTAD DE INGENIERÍA MECÁNICA Y ELÉCTRICA</span>
+                <span>DIEGO ANDRÉ ISLAS CADILLO</span>
+            </div>
+        </section>
+
+        <!-- --- NAVEGACIÓN Y PROGRESO --- -->
+        <div class="controls-overlay">
+            <button class="nav-btn" id="prev-btn" aria-label="Slide anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <button class="nav-btn" id="next-btn" aria-label="Siguiente slide">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+    </div>
+
+    <!-- --- LÓGICA DE INTERACCIÓN --- -->
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressBar = document.getElementById('progress-bar');
+        
+        let currentSlideIndex = 0;
+
+        function updateSlides() {
+            // Actualizar clases de los slides
+            slides.forEach((slide, idx) => {
+                if (idx === currentSlideIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Actualizar barra de progreso
+            const percent = ((currentSlideIndex) / (slides.length - 1)) * 100;
+            progressBar.style.width = `${percent}%`;
+
+            // Cambiar color de la barra de progreso según el tema activo del slide
+            const activeSlide = slides[currentSlideIndex];
+            if (activeSlide.classList.contains('theme-light')) {
+                progressBar.style.backgroundColor = '#0F172A';
+            } else {
+                progressBar.style.backgroundColor = '#FFFFFF';
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < slides.length - 1) {
+                currentSlideIndex++;
+                updateSlides();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                updateSlides();
+            }
+        }
+
+        // Eventos de botones
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Eventos del teclado
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Inicializar barra de progreso
+        updateSlides();
+    </script>
+</body>
+</html>
